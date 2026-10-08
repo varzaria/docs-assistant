@@ -4,6 +4,7 @@
   py evaluate.py --limit 5       # quick check on the first 5 questions
   py evaluate.py --design B      # one design only
   py evaluate.py --set esg       # the ESG reports (run download_esg_reports.py first)
+  py evaluate.py --set esg --design B --top-k 20   # search design with more passages
 
 Each answer is graded against the reference answer by a separate Claude call
 ("LLM as judge"), and its citations are checked against the page the answer is on.
@@ -97,6 +98,7 @@ def main() -> None:
     parser.add_argument("--set", choices=list(QUESTION_FILES), default="cafe", help="document set: cafe (default) or esg")
     parser.add_argument("--limit", type=int, help="only the first N questions")
     parser.add_argument("--design", choices=["A", "B", "both"], default="both")
+    parser.add_argument("--top-k", type=int, help="design B: number of passages to retrieve (default 5)")
     args = parser.parse_args()
 
     questions = json.load(open(ROOT / QUESTION_FILES[args.set], encoding="utf-8"))[: args.limit]
@@ -107,7 +109,7 @@ def main() -> None:
 
     rows = []
     for key in chosen:
-        assistant = designs[key](args.set)
+        assistant = designs[key](args.set, top_k=args.top_k) if key == "B" else designs[key](args.set)
         print(f"\n=== Design {assistant.approach} ({args.set}) ===")
         for q in questions:
             a = assistant.ask(q["question"])
@@ -127,7 +129,8 @@ def main() -> None:
 
     df = pd.DataFrame(rows)
     RESULTS.mkdir(exist_ok=True)
-    out = RESULTS / f"eval-{args.set}-{datetime.now():%Y%m%d-%H%M%S}.csv"
+    suffix = f"-top{args.top_k}" if args.top_k else ""
+    out = RESULTS / f"eval-{args.set}{suffix}-{datetime.now():%Y%m%d-%H%M%S}.csv"
     df.to_csv(out, index=False, encoding="utf-8")
 
     print("\n=== Summary ===")

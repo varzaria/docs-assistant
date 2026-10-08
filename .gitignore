@@ -4,3 +4,4 @@ __pycache__/
 results/
 logs/
 esg_reports/
+.text_cache.json

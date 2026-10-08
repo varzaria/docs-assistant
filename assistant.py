@@ -12,6 +12,7 @@ Both designs use Claude's built-in citations, so every statement links to a docu
 """
 
 import base64
+import json
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -73,10 +74,24 @@ class Answer:
 
 
 def load_documents(folder: Path) -> list[dict]:
-    docs = []
+    """Read each PDF's text page by page. The text is saved to a cache file next to the PDFs,
+    because extracting hundreds of pages takes minutes; the cache is refreshed if a PDF changes."""
+    cache_path = folder / ".text_cache.json"
+    try:
+        cache = json.loads(cache_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        cache = {}
+    docs, changed = [], False
     for path in sorted(folder.glob("*.pdf")):
-        pages = [" ".join((p.extract_text() or "").split()) for p in PdfReader(path).pages]
-        docs.append({"name": path.stem, "path": path, "pages": pages})
+        stamp = f"{path.stat().st_size}-{path.stat().st_mtime_ns}"
+        entry = cache.get(path.name)
+        if not entry or entry["stamp"] != stamp:
+            pages = [" ".join((p.extract_text() or "").split()) for p in PdfReader(path).pages]
+            cache[path.name] = entry = {"stamp": stamp, "pages": pages}
+            changed = True
+        docs.append({"name": path.stem, "path": path, "pages": entry["pages"]})
+    if changed and folder.exists():
+        cache_path.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
     return docs
 
 
@@ -184,8 +199,11 @@ class SearchAssistant(_Base):
     approach = "B: search first"
     WORDS, OVERLAP, TOP_K = 120, 40, 5
 
-    def __init__(self, doc_set: str = "cafe"):
+    def __init__(self, doc_set: str = "cafe", top_k: int | None = None):
         super().__init__(doc_set)
+        if top_k:
+            self.TOP_K = top_k
+            self.approach = f"B: search first (top {top_k})"
         self.passages = []  # {"doc", "page", "text"}
         for doc in self.docs:
             for page_number, page_text in enumerate(doc["pages"], 1):
