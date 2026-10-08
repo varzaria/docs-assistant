@@ -1,0 +1,7 @@
+anthropic
+python-dotenv
+streamlit
+reportlab
+pypdf
+pandas
+scikit-learn
