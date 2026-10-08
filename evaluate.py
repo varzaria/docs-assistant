@@ -3,6 +3,7 @@
   py evaluate.py                 # both designs, all questions (about $2)
   py evaluate.py --limit 5       # quick check on the first 5 questions
   py evaluate.py --design B      # one design only
+  py evaluate.py --set esg       # the ESG reports (run download_esg_reports.py first)
 
 Each answer is graded against the reference answer by a separate Claude call
 ("LLM as judge"), and its citations are checked against the page the answer is on.
@@ -18,7 +19,7 @@ from pathlib import Path
 import pandas as pd
 from pypdf import PdfReader
 
-from assistant import ROOT, FullContextAssistant, SearchAssistant, _Base
+from assistant import DOC_SETS, ROOT, FullContextAssistant, SearchAssistant, _Base
 
 RESULTS = ROOT / "results"
 
@@ -63,39 +64,57 @@ class Judge(_Base):
         return {**json.loads(text), "judge_cost": (usage.input_tokens * 4 + usage.output_tokens * 20) / 1e6}
 
 
-def expected_pages(questions: list[dict]) -> dict:
-    """The page each answer is on, found by searching the PDF for the anchor phrase."""
+QUESTION_FILES = {"cafe": "questions.json", "esg": "esg_questions.json"}
+
+
+def sources(q: dict) -> list[dict]:
+    """Where the answer is. The café questions name one document; ESG questions can name several."""
+    if "sources" in q:
+        return q["sources"]
+    return [{"doc": q["source_doc"], "anchor": q["anchor"]}] if q["source_doc"] else []
+
+
+def expected_pages(questions: list[dict], folder) -> dict:
+    """For each question: one set of acceptable (doc, page) pairs per source, found by searching for the anchor."""
     pages, cache = {}, {}
     for q in questions:
-        if not q["source_doc"]:
-            continue
-        doc = q["source_doc"]
-        cache.setdefault(doc, [" ".join(p.extract_text().split()) for p in PdfReader(ROOT / "documents" / f"{doc}.pdf").pages])
-        pages[q["id"]] = next(i + 1 for i, text in enumerate(cache[doc]) if q["anchor"] in text)
+        needed = []
+        for s in sources(q):
+            cache.setdefault(s["doc"], [" ".join((p.extract_text() or "").split()) for p in PdfReader(folder / f"{s['doc']}.pdf").pages])
+            # A page counts if it contains the anchor phrase or, where given, matches the fact pattern ("key"),
+            # because long reports often state the same figure on several pages.
+            hits = {(s["doc"], i + 1) for i, text in enumerate(cache[s["doc"]])
+                    if s["anchor"] in text or ("key" in s and re.search(s["key"], text))}
+            if not hits:
+                raise ValueError(f"Q{q['id']}: anchor {s['anchor']!r} not found in {s['doc']}")
+            needed.append(hits)
+        pages[q["id"]] = needed
     return pages
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--set", choices=list(QUESTION_FILES), default="cafe", help="document set: cafe (default) or esg")
     parser.add_argument("--limit", type=int, help="only the first N questions")
     parser.add_argument("--design", choices=["A", "B", "both"], default="both")
     args = parser.parse_args()
 
-    questions = json.load(open(ROOT / "questions.json", encoding="utf-8"))[: args.limit]
-    pages = expected_pages(questions)
+    questions = json.load(open(ROOT / QUESTION_FILES[args.set], encoding="utf-8"))[: args.limit]
+    pages = expected_pages(questions, DOC_SETS[args.set]["folder"])
     designs = {"A": FullContextAssistant, "B": SearchAssistant}
     chosen = ["A", "B"] if args.design == "both" else [args.design]
     judge = Judge()
 
     rows = []
     for key in chosen:
-        assistant = designs[key]()
-        print(f"\n=== Design {assistant.approach} ===")
+        assistant = designs[key](args.set)
+        print(f"\n=== Design {assistant.approach} ({args.set}) ===")
         for q in questions:
             a = assistant.ask(q["question"])
             g = judge.grade(q["question"], q["reference_answer"], a.text)
             cited = {(c.doc, c.page) for c in a.citations}
-            citation_ok = None if not q["source_doc"] else (q["source_doc"], pages[q["id"]]) in cited
+            # Correct citation = at least one acceptable page cited for every source the answer needs.
+            citation_ok = None if not pages[q["id"]] else all(cited & needed for needed in pages[q["id"]])
             rows.append({
                 "design": key, "id": q["id"], "category": q["category"], "question": q["question"],
                 "verdict": g["verdict"], "citation_ok": citation_ok, "seconds": round(a.seconds, 2),
@@ -108,7 +127,7 @@ def main() -> None:
 
     df = pd.DataFrame(rows)
     RESULTS.mkdir(exist_ok=True)
-    out = RESULTS / f"eval-{datetime.now():%Y%m%d-%H%M%S}.csv"
+    out = RESULTS / f"eval-{args.set}-{datetime.now():%Y%m%d-%H%M%S}.csv"
     df.to_csv(out, index=False, encoding="utf-8")
 
     print("\n=== Summary ===")

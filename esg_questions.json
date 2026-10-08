@@ -1,0 +1,251 @@
+[
+  {
+    "id": 101,
+    "category": "lookup",
+    "question": "By how much had Kerry Group reduced its Scope 1 and 2 carbon emissions by 2025?",
+    "reference_answer": "52% (up from 50% in 2024).",
+    "sources": [
+      {
+        "doc": "kerry_annual_report_2025",
+        "anchor": "Scope 1 & 2 Carbon Reduction3 52%",
+        "key": "(?s)Scope 1.{0,200}52%|52%.{0,200}Scope 1"
+      }
+    ]
+  },
+  {
+    "id": 102,
+    "category": "lookup",
+    "question": "How much has Kerry Group reduced food waste?",
+    "reference_answer": "54% in 2025 (38% in 2024).",
+    "sources": [
+      {
+        "doc": "kerry_annual_report_2025",
+        "anchor": "Reduction in Food Waste2 54%",
+        "key": "(?is)food waste.{0,100}54%|54%.{0,100}food waste"
+      }
+    ]
+  },
+  {
+    "id": 103,
+    "category": "lookup",
+    "question": "How many consumers did Kerry reach with positive and balanced nutritional solutions in 2025?",
+    "reference_answer": "1.46 billion (1.36 billion in 2024).",
+    "sources": [
+      {
+        "doc": "kerry_annual_report_2025",
+        "anchor": "1.46bn"
+      }
+    ]
+  },
+  {
+    "id": 104,
+    "category": "lookup",
+    "question": "How many employees does Kerry Group have?",
+    "reference_answer": "More than 19,000 employees across 185+ locations in 50+ countries.",
+    "sources": [
+      {
+        "doc": "kerry_annual_report_2025",
+        "anchor": "19,000+",
+        "key": "19,000"
+      }
+    ]
+  },
+  {
+    "id": 105,
+    "category": "table",
+    "question": "What are Kerry Group's EBITDA margin targets?",
+    "reference_answer": "18-19% by 2026 and 19-20% by 2028 (the 2025 margin was 17.9%).",
+    "sources": [
+      {
+        "doc": "kerry_annual_report_2025",
+        "anchor": "19-20% by 2028",
+        "key": "19-20%"
+      }
+    ]
+  },
+  {
+    "id": 106,
+    "category": "lookup",
+    "question": "What was Kerry Group's total dividend per share for 2025?",
+    "reference_answer": "140.0 cent, up 10.1% on 2024 (127.1c).",
+    "sources": [
+      {
+        "doc": "kerry_annual_report_2025",
+        "anchor": "140.0c",
+        "key": "140\\.0\\s?c"
+      }
+    ]
+  },
+  {
+    "id": 107,
+    "category": "lookup",
+    "question": "What is Ryanair's target for sustainable aviation fuel (SAF)?",
+    "reference_answer": "12.5% SAF by 2030.",
+    "sources": [
+      {
+        "doc": "ryanair_sustainability_statement_fy26",
+        "anchor": "SAF goal of 12.5% by 2030",
+        "key": "12\\.5%"
+      }
+    ]
+  },
+  {
+    "id": 108,
+    "category": "lookup",
+    "question": "How much more expensive can sustainable aviation fuel be than normal jet fuel, according to Ryanair?",
+    "reference_answer": "Up to four times the cost of normal jet kerosene, depending on feedstock and country of uplift.",
+    "sources": [
+      {
+        "doc": "ryanair_sustainability_statement_fy26",
+        "anchor": "up to four times the cost",
+        "key": "(?i)four times"
+      }
+    ]
+  },
+  {
+    "id": 109,
+    "category": "lookup",
+    "question": "What is Ryanair's fuel efficiency per passenger kilometre?",
+    "reference_answer": "63 grams of CO2 per passenger kilometre.",
+    "sources": [
+      {
+        "doc": "ryanair_sustainability_statement_fy26",
+        "anchor": "63 grams of CO2",
+        "key": "63\\s?g(rams)?\\s(of\\s)?CO2"
+      }
+    ]
+  },
+  {
+    "id": 110,
+    "category": "table",
+    "question": "In Ryanair's transition plan to net zero, what share of the emissions reduction is expected to come from SAF?",
+    "reference_answer": "34% (with 32% from improved technology, 10% from air traffic reform and 24% from offsetting).",
+    "sources": [
+      {
+        "doc": "ryanair_sustainability_statement_fy26",
+        "anchor": "SAF 34%",
+        "key": "SAF 34%|34%.{0,40}SAF"
+      }
+    ]
+  },
+  {
+    "id": 111,
+    "category": "lookup",
+    "question": "What are Bank of Ireland's sustainable finance targets?",
+    "reference_answer": "About €15 billion by 2025 (on track to be met early) and about €30 billion by 2030.",
+    "sources": [
+      {
+        "doc": "bank_of_ireland_sustainability_report_2024",
+        "anchor": "c.€15 billion by 2025",
+        "key": "€15\\s?b(illio)?n"
+      }
+    ]
+  },
+  {
+    "id": 112,
+    "category": "lookup",
+    "question": "What is Bank of Ireland's target for its own Scope 1 and 2 emissions?",
+    "reference_answer": "A 49% absolute reduction by 2030 from a 2020 base year (plus 100% renewable electricity by 2025).",
+    "sources": [
+      {
+        "doc": "bank_of_ireland_sustainability_report_2024",
+        "anchor": "49% by 2030 from a 2020 base year",
+        "key": "49%"
+      }
+    ]
+  },
+  {
+    "id": 113,
+    "category": "table",
+    "question": "What is Bank of Ireland's emissions target for its residential mortgage portfolio, and how much progress had it made by 2024?",
+    "reference_answer": "A 48% reduction in portfolio emissions intensity by 2030 versus 2020; progress by 2024 was 14% against a pathway of 19%.",
+    "sources": [
+      {
+        "doc": "bank_of_ireland_sustainability_report_2024",
+        "anchor": "48% reduction in portfolio GHG emissions intensity by 2030",
+        "key": "48%"
+      }
+    ]
+  },
+  {
+    "id": 114,
+    "category": "lookup",
+    "question": "Has Bank of Ireland reached 100% renewable electricity?",
+    "reference_answer": "Yes. As at 31 December 2024 all of its electricity supply is renewable, ahead of its 2025 target.",
+    "sources": [
+      {
+        "doc": "bank_of_ireland_sustainability_report_2024",
+        "anchor": "all electricity energy supply is renewable",
+        "key": "(?i)all electricity.{0,60}renewable|100% renewable"
+      }
+    ]
+  },
+  {
+    "id": 115,
+    "category": "cross_doc",
+    "question": "When do Kerry Group and Ryanair each aim to reach net zero?",
+    "reference_answer": "Kerry: before 2050. Ryanair: by 2050.",
+    "sources": [
+      {
+        "doc": "kerry_annual_report_2025",
+        "anchor": "Net Zero before 2050",
+        "key": "(?i)net zero before 2050"
+      },
+      {
+        "doc": "ryanair_sustainability_statement_fy26",
+        "anchor": "net zero emissions by 2050",
+        "key": "(?i)net[- ]zero.{0,40}2050"
+      }
+    ]
+  },
+  {
+    "id": 116,
+    "category": "cross_doc",
+    "question": "Compare Kerry Group's Scope 1 and 2 reduction so far with Bank of Ireland's Scope 1 and 2 target.",
+    "reference_answer": "Kerry had achieved a 52% reduction by 2025; Bank of Ireland targets a 49% absolute reduction by 2030 from 2020.",
+    "sources": [
+      {
+        "doc": "kerry_annual_report_2025",
+        "anchor": "Scope 1 & 2 Carbon Reduction3 52%",
+        "key": "(?s)Scope 1.{0,200}52%|52%.{0,200}Scope 1"
+      },
+      {
+        "doc": "bank_of_ireland_sustainability_report_2024",
+        "anchor": "49% by 2030 from a 2020 base year",
+        "key": "49%"
+      }
+    ]
+  },
+  {
+    "id": 117,
+    "category": "multi_part",
+    "question": "How much more expensive was SAF than jet fuel, and what SAF share is Ryanair aiming for by 2030?",
+    "reference_answer": "SAF can cost up to four times as much as normal jet kerosene; Ryanair's goal is 12.5% SAF by 2030.",
+    "sources": [
+      {
+        "doc": "ryanair_sustainability_statement_fy26",
+        "anchor": "up to four times the cost",
+        "key": "(?i)four times"
+      },
+      {
+        "doc": "ryanair_sustainability_statement_fy26",
+        "anchor": "SAF goal of 12.5% by 2030",
+        "key": "12\\.5%"
+      }
+    ]
+  },
+  {
+    "id": 118,
+    "category": "unanswerable",
+    "question": "What is Glanbia's Scope 3 emissions target?",
+    "reference_answer": "Not in the documents.",
+    "sources": []
+  },
+  {
+    "id": 119,
+    "category": "unanswerable",
+    "question": "Does Ryanair offer its staff a four-day working week?",
+    "reference_answer": "Not in the documents.",
+    "sources": []
+  }
+]

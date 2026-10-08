@@ -5,7 +5,7 @@ Run with:  streamlit run app.py
 
 import streamlit as st
 
-from assistant import FullContextAssistant, SearchAssistant, load_documents
+from assistant import ROOT, FullContextAssistant, SearchAssistant, load_documents
 
 st.set_page_config(page_title="Ask our documents", page_icon="☕", layout="centered")
 
@@ -33,7 +33,7 @@ with st.sidebar:
                       "B searches for the most relevant passages and sends only those.")
     st.divider()
     st.subheader("Documents")
-    for doc in load_documents():
+    for doc in load_documents(ROOT / "documents"):
         n = len(doc["pages"])
         st.caption(f"📄 {doc['name'].replace('_', ' ')} ({n} page{'s' if n != 1 else ''})")
     st.divider()
