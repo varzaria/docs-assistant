@@ -68,6 +68,8 @@ Public reports from three industries: Kerry Group Annual Report 2025 (290 pages)
 
 **Simply retrieving more passages closed most of the gap.** Going from 5 to 20 passages took search from 9 / 19 to 17 / 19 correct, at $0.044 per question: about a fifth of read-everything's average cost, or under half its cost once the reports are cached. Both remaining misses were "I couldn't find it" answers, not wrong numbers.
 
+**See real answers:** [docs/example-answers.md](docs/example-answers.md) shows seven questions with the assistant's unedited answers, including the outdated-rule trap, "I don't know" answers, and where keyword search failed.
+
 ### What this means for a client
 
 | Situation | Recommendation |
