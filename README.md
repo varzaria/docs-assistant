@@ -6,8 +6,9 @@ An assistant that answers questions from a company's own documents, cites the pa
 - **100% correct on 467 pages of real Irish sustainability reports** (19 / 19) when the assistant reads everything, at about 23 cents per question
 - **Keyword search is far cheaper on the large reports but only as good as what it retrieves**: 9 / 19 correct with 5 passages, 17 / 19 with 20, and its misses were "I couldn't find it", not invented answers
 
-<!-- Demo: add the recording as docs/demo.gif and uncomment the next line -->
-<!-- ![Chat demo](docs/demo.gif) -->
+### ▶ Watch the demo (2 minutes)
+
+[![Demo video: both designs answering the same questions side by side, on a staff handbook and on 467 pages of sustainability reports](https://img.youtube.com/vi/rBOe_osBocE/hqdefault.jpg)](https://youtu.be/rBOe_osBocE)
 
 ## The business problem
 
