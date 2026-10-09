@@ -82,6 +82,19 @@ Public reports from three industries: Kerry Group Annual Report 2025 (290 pages)
 
 **Limitations.** The question sets are small (35 and 19), so the results show clear trends rather than precise percentages. The café documents are synthetic and written by the same person who wrote the questions.
 
+## Risk and compliance
+
+*An initial assessment of what deploying this for a company's staff would involve. Not legal advice.*
+
+| Area | What applies | How the design handles it, and what's still needed |
+| --- | --- | --- |
+| **EU AI Act: transparency** | A chat assistant falls under the Act's transparency rules (Article 50): people must be told they are dealing with an AI system unless it's obvious. | The page is clearly an assistant and every answer cites its sources. In production, add a short notice: "AI assistant: check the cited page before acting." |
+| **EU AI Act: where it would become high-risk** | AI used to make or support decisions about employees (hiring, promotion, discipline, dismissal) is a high-risk use under the Act, with much stricter requirements. | Positioned for **information only**: it explains what the policy says and cites it, and people make decisions from the source. Keep it out of HR decisions. |
+| **Wrong answers** | Staff may act on an answer, and some topics are safety-critical, such as allergens and food temperatures. | Every statement is cited by page, "I don't know" behaviour was tested, and outdated rules were tested. For safety-critical topics, the answer should always point to the source document (the café's allergen procedure already says to check the allergen folder, never memory). |
+| **GDPR** | Company documents can contain personal data (names, contact details), and they are sent to the AI provider with each question. | Sign the provider's data processing terms; don't load documents holding sensitive personal data, such as employee files. Extracted text is cached locally and never committed to the repository. |
+| **Keeping documents current** | An outdated document gives outdated answers. | Replacing a PDF is enough: the text cache refreshes automatically when a file changes. In production, give one person responsibility for keeping the document set up to date. |
+| **Copyright** | Published reports are the companies' copyrighted material. | They are not stored in this repository; `download_esg_reports.py` fetches them from the companies' own websites. |
+
 ## Run it yourself
 
 Requires Python 3.10+ and an [Anthropic API key](https://console.anthropic.com).
